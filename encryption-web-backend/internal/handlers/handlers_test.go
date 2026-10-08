@@ -207,8 +207,8 @@ func TestFileUploadDownloadAndBenchmark(t *testing.T) {
 
 	token := registerAndGetToken(t, r, "bob", "bobpassword123")
 
-	// Create dummy file payload
-	fileContent := bytes.Repeat([]byte("This is sample test document data representing a confidential PDF/DOC/XLS file. "), 100)
+	// Create dummy file payload (increased size to prevent micro-duration timer granularity collapse)
+	fileContent := bytes.Repeat([]byte("This is sample test document data representing a confidential PDF/DOC/XLS file. "), 1000)
 	hasher := sha256.New()
 	hasher.Write(fileContent)
 	expectedHash := hex.EncodeToString(hasher.Sum(nil))

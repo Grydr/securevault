@@ -19,9 +19,9 @@ Every stored record and uploaded file is simultaneously encrypted with all three
 
 | Classification | Legal Basis | Implementation in Vault |
 | :--- | :--- | :--- |
-| **Data Pribadi Umum (General Personal Data)** | UU PDP Art. 4(2), GDPR Art. 4(1) | Full Name, Date of Birth, Email, Phone Number, Residential Address. |
-| **Data Pribadi Spesifik (Sensitive/Specific Data)** | UU PDP Art. 4(1), GDPR Art. 9 | Health Information (blood type, medical history), Personal Financial Data (bank accounts, NPWP/tax ID), Biometric Notes. |
-| **Unique National Identifier** | UU PDP Art. 4(2)(e) | Nomor Induk Kependudukan (NIK / KTP Number). |
+| **Data Pribadi Umum (General Personal Data)** | UU PDP Art. 4(3), GDPR Art. 4(1) | Full Name, Date of Birth, Email, Phone Number, Residential Address. |
+| **Data Pribadi Spesifik (Sensitive/Specific Data)** | UU PDP Art. 4(2), GDPR Art. 9 | Health Information (blood type, medical history), Personal Financial Data (bank accounts, NPWP/tax ID), Biometric Notes. |
+| **Unique National Identifier** | UU PDP Art. 4(3)(f) | Nomor Induk Kependudukan (NIK / KTP Number). |
 
 Under UU PDP Article 35 and GDPR Article 32, data controllers are legally mandated to implement pseudonymization and encryption to protect personal data from unauthorized disclosure, alteration, or breach. Plaintext storage of these attributes is non-compliant; storing them encrypted under AES-256 satisfies both domestic and international compliance standards.
 

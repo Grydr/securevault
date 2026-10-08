@@ -94,6 +94,9 @@ func EncryptAES(plaintext, key []byte) ([]byte, time.Duration, error) {
 	mode.CryptBlocks(ciphertext, padded)
 
 	duration := time.Since(start)
+	if duration <= 0 {
+		duration = time.Nanosecond
+	}
 
 	// Result format: IV (16 bytes) || Ciphertext
 	result := make([]byte, len(iv)+len(ciphertext))
@@ -136,6 +139,9 @@ func DecryptAES(ciphertextWithIV, key []byte) ([]byte, time.Duration, error) {
 	}
 
 	duration := time.Since(start)
+	if duration <= 0 {
+		duration = time.Nanosecond
+	}
 	return plaintext, duration, nil
 }
 
@@ -172,6 +178,9 @@ func EncryptDES(plaintext, key []byte) ([]byte, time.Duration, error) {
 	mode.CryptBlocks(ciphertext, padded)
 
 	duration := time.Since(start)
+	if duration <= 0 {
+		duration = time.Nanosecond
+	}
 
 	// Result format: IV (8 bytes) || Ciphertext
 	result := make([]byte, len(iv)+len(ciphertext))
@@ -214,6 +223,9 @@ func DecryptDES(ciphertextWithIV, key []byte) ([]byte, time.Duration, error) {
 	}
 
 	duration := time.Since(start)
+	if duration <= 0 {
+		duration = time.Nanosecond
+	}
 	return plaintext, duration, nil
 }
 
@@ -261,6 +273,9 @@ func EncryptRC4(plaintext, key []byte) ([]byte, time.Duration, error) {
 	cipherInstance.XORKeyStream(ciphertext, plaintext)
 
 	duration := time.Since(start)
+	if duration <= 0 {
+		duration = time.Nanosecond
+	}
 
 	result := make([]byte, rc4NonceSize+len(ciphertext))
 	copy(result[:rc4NonceSize], nonce)
@@ -297,5 +312,8 @@ func DecryptRC4(ciphertextWithNonce, key []byte) ([]byte, time.Duration, error) 
 	cipherInstance.XORKeyStream(plaintext, ciphertext)
 
 	duration := time.Since(start)
+	if duration <= 0 {
+		duration = time.Nanosecond
+	}
 	return plaintext, duration, nil
 }

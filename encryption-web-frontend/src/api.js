@@ -39,7 +39,7 @@ async function request(url, options = {}) {
     try {
       const data = await res.json();
       if (data.error) errorMsg = data.error;
-    } catch (_) {}
+    } catch {}
     throw new Error(errorMsg);
   }
 

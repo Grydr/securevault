@@ -1,30 +1,41 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ShieldCheck, X, Clock, Hash, CheckCircle2, AlertTriangle, Key, Download, Copy, Check } from 'lucide-react';
 import { api } from '../api';
 
+function formatNs(ns) {
+  if (!ns && ns !== 0) return '0 µs';
+  if (ns < 1000) return `${ns} ns`;
+  if (ns < 1000000) return `${(ns / 1000).toFixed(2)} µs`;
+  return `${(ns / 1000000).toFixed(3)} ms`;
+}
+
 export default function DecryptModal({ record, onClose }) {
   const [selectedCipher, setSelectedCipher] = useState('aes');
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [decryptedData, setDecryptedData] = useState(null);
   const [error, setError] = useState('');
   const [copiedHex, setCopiedHex] = useState(false);
 
-  const fetchDecrypted = useCallback(async (cipher) => {
-    setLoading(true);
-    setError('');
-    try {
-      const res = await api.decryptPersonalData(record.id, cipher);
-      setDecryptedData(res);
-    } catch (err) {
-      setError(err.message || 'Decryption failed');
-    } finally {
-      setLoading(false);
-    }
-  }, [record.id]);
-
   useEffect(() => {
-    fetchDecrypted(selectedCipher);
-  }, [fetchDecrypted, selectedCipher]);
+    let ignore = false;
+    api.decryptPersonalData(record.id, selectedCipher)
+      .then((res) => {
+        if (!ignore) {
+          setDecryptedData(res);
+          setError('');
+          setLoading(false);
+        }
+      })
+      .catch((err) => {
+        if (!ignore) {
+          setError(err.message || 'Decryption failed');
+          setLoading(false);
+        }
+      });
+    return () => {
+      ignore = true;
+    };
+  }, [record.id, selectedCipher]);
 
   const handleDownloadDecryptedJSON = () => {
     if (!decryptedData) return;
@@ -55,13 +66,6 @@ export default function DecryptModal({ record, onClose }) {
     navigator.clipboard.writeText(text);
     setCopiedHex(true);
     setTimeout(() => setCopiedHex(false), 2000);
-  };
-
-  const formatNs = (ns) => {
-    if (!ns && ns !== 0) return '0 µs';
-    if (ns < 1000) return `${ns} ns`;
-    if (ns < 1000000) return `${(ns / 1000).toFixed(2)} µs`;
-    return `${(ns / 1000000).toFixed(3)} ms`;
   };
 
   const activeHex = selectedCipher === 'aes' 
@@ -95,19 +99,19 @@ export default function DecryptModal({ record, onClose }) {
           <div style={{ display: 'flex', gap: '0.45rem' }}>
             <button
               className={`btn btn-sm ${selectedCipher === 'aes' ? 'btn-primary' : 'btn-secondary'}`}
-              onClick={() => setSelectedCipher('aes')}
+              onClick={() => { if (selectedCipher !== 'aes') { setSelectedCipher('aes'); setLoading(true); } }}
             >
               <span className="badge badge-aes">AES-256-CBC</span>
             </button>
             <button
               className={`btn btn-sm ${selectedCipher === 'rc4' ? 'btn-primary' : 'btn-secondary'}`}
-              onClick={() => setSelectedCipher('rc4')}
+              onClick={() => { if (selectedCipher !== 'rc4') { setSelectedCipher('rc4'); setLoading(true); } }}
             >
               <span className="badge badge-rc4">RC4-128</span>
             </button>
             <button
               className={`btn btn-sm ${selectedCipher === 'des' ? 'btn-primary' : 'btn-secondary'}`}
-              onClick={() => setSelectedCipher('des')}
+              onClick={() => { if (selectedCipher !== 'des') { setSelectedCipher('des'); setLoading(true); } }}
             >
               <span className="badge badge-des">DES-CBC</span>
             </button>

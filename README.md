@@ -96,4 +96,4 @@ npm run build
 
 ## 📑 Detailed Analysis Report
 
-Refer to [`ANALYSIS_REPORT.md`](file:///home/gryd/ITS-TC/Semester-5/KI/encryption-web/ANALYSIS_REPORT.md) for the in-depth cryptographic and empirical comparison, running time measurements, and legal compliance discussion (GDPR & UU PDP Law No. 27/2022).
+Refer to [`ANALYSIS_REPORT.md`](./ANALYSIS_REPORT.md) for the in-depth cryptographic and empirical comparison, running time measurements, and legal compliance discussion (GDPR & UU PDP Law No. 27/2022).

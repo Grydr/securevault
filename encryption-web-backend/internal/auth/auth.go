@@ -17,6 +17,7 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/user/encryption-web-backend/internal/crypto"
 	"golang.org/x/crypto/bcrypt"
+	"golang.org/x/crypto/hkdf"
 )
 
 type contextKey string
@@ -39,14 +40,31 @@ type CustomClaims struct {
 }
 
 type AuthService struct {
-	jwtSecret []byte
+	jwtSigningKey []byte // 32 bytes for JWT HMAC signing
+	aesGcmKey     []byte // 32 bytes for AES-256-GCM token payload encryption
 }
 
 func NewAuthService(jwtSecretStr string) *AuthService {
-	// Hash secret to get consistent 32-byte key for AES-GCM token encryption
-	hash := sha256.Sum256([]byte(jwtSecretStr))
+	masterSecret := []byte(jwtSecretStr)
+
+	// Derive distinct 32-byte keys via HKDF-SHA256 for cryptographic domain separation:
+	// 1) jwtSigningKey for HMAC-SHA256 token signing
+	// 2) aesGcmKey for AES-256-GCM encrypted claims payload
+	jwtSigningKey := make([]byte, 32)
+	jwtKdf := hkdf.New(sha256.New, masterSecret, nil, []byte("jwt-hmac-signing-key"))
+	if _, err := io.ReadFull(jwtKdf, jwtSigningKey); err != nil {
+		panic(fmt.Sprintf("failed to derive jwt signing key: %v", err))
+	}
+
+	aesGcmKey := make([]byte, 32)
+	gcmKdf := hkdf.New(sha256.New, masterSecret, nil, []byte("token-payload-aes-gcm-key"))
+	if _, err := io.ReadFull(gcmKdf, aesGcmKey); err != nil {
+		panic(fmt.Sprintf("failed to derive aes-gcm key: %v", err))
+	}
+
 	return &AuthService{
-		jwtSecret: hash[:],
+		jwtSigningKey: jwtSigningKey,
+		aesGcmKey:     aesGcmKey,
 	}
 }
 
@@ -64,7 +82,7 @@ func (s *AuthService) CheckPassword(password, hash string) bool {
 
 // encryptKeysBlob encrypts derived keys into a hex string using AES-256-GCM.
 func (s *AuthService) encryptKeysBlob(keys *crypto.DerivedKeys) (string, error) {
-	block, err := aes.NewCipher(s.jwtSecret)
+	block, err := aes.NewCipher(s.aesGcmKey)
 	if err != nil {
 		return "", err
 	}
@@ -95,7 +113,7 @@ func (s *AuthService) decryptKeysBlob(hexStr string) (*crypto.DerivedKeys, error
 		return nil, err
 	}
 
-	block, err := aes.NewCipher(s.jwtSecret)
+	block, err := aes.NewCipher(s.aesGcmKey)
 	if err != nil {
 		return nil, err
 	}
@@ -151,7 +169,7 @@ func (s *AuthService) GenerateToken(userID, username string, keys *crypto.Derive
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return token.SignedString(s.jwtSecret)
+	return token.SignedString(s.jwtSigningKey)
 }
 
 // ValidateToken parses and validates a token string.
@@ -160,7 +178,7 @@ func (s *AuthService) ValidateToken(tokenStr string) (*AuthUser, error) {
 		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", t.Header["alg"])
 		}
-		return s.jwtSecret, nil
+		return s.jwtSigningKey, nil
 	})
 
 	if err != nil {

@@ -3,9 +3,16 @@ import { Shield, Plus, Trash2, Eye, FileText, CheckCircle2, Download, X } from '
 import { api } from '../api';
 import DecryptModal from './DecryptModal';
 
+function formatNs(ns) {
+  if (!ns && ns !== 0) return '0 µs';
+  if (ns < 1000) return `${ns} ns`;
+  if (ns < 1000000) return `${(ns / 1000).toFixed(2)} µs`;
+  return `${(ns / 1000000).toFixed(3)} ms`;
+}
+
 export default function PersonalDataTab() {
   const [records, setRecords] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [showAddForm, setShowAddForm] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState(null);
   const [error, setError] = useState('');
@@ -23,21 +30,36 @@ export default function PersonalDataTab() {
   const [financialData, setFinancialData] = useState('');
   const [biometricNote, setBiometricNote] = useState('');
 
-  const loadRecords = useCallback(async () => {
+  const loadRecords = useCallback(() => {
     setLoading(true);
-    try {
-      const data = await api.getPersonalData();
-      setRecords(data);
-    } catch (err) {
-      setError(err.message || 'Failed to load personal data');
-    } finally {
-      setLoading(false);
-    }
+    api.getPersonalData()
+      .then((data) => {
+        setRecords(data);
+      })
+      .catch((err) => {
+        setError(err.message || 'Failed to load personal data');
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
 
   useEffect(() => {
-    loadRecords();
-  }, [loadRecords]);
+    let ignore = false;
+    api.getPersonalData()
+      .then((data) => {
+        if (!ignore) setRecords(data);
+      })
+      .catch((err) => {
+        if (!ignore) setError(err.message || 'Failed to load personal data');
+      })
+      .finally(() => {
+        if (!ignore) setLoading(false);
+      });
+    return () => {
+      ignore = true;
+    };
+  }, []);
 
   const handleCreate = async (e) => {
     e.preventDefault();
@@ -68,6 +90,7 @@ export default function PersonalDataTab() {
       setHealthData('');
       setFinancialData('');
       setBiometricNote('');
+      setLoading(true);
       loadRecords();
       setTimeout(() => setSuccess(''), 4000);
     } catch (err) {
@@ -78,6 +101,7 @@ export default function PersonalDataTab() {
   const handleDelete = async (id) => {
     if (!window.confirm('Delete this encrypted record and all its ciphertexts?')) return;
     try {
+      setLoading(true);
       await api.deletePersonalData(id);
       loadRecords();
     } catch (err) {
@@ -85,7 +109,7 @@ export default function PersonalDataTab() {
     }
   };
 
-  const handleQuickDownload = async (record, cipher = 'aes') => {
+  const handleQuickDownload = useCallback(async (record, cipher = 'aes') => {
     try {
       const res = await api.decryptPersonalData(record.id, cipher);
       const now = new Date().toISOString();
@@ -113,14 +137,7 @@ export default function PersonalDataTab() {
     } catch (err) {
       setError(`Failed to decrypt and download: ${err.message}`);
     }
-  };
-
-  const formatNs = (ns) => {
-    if (!ns && ns !== 0) return '0 µs';
-    if (ns < 1000) return `${ns} ns`;
-    if (ns < 1000000) return `${(ns / 1000).toFixed(2)} µs`;
-    return `${(ns / 1000000).toFixed(3)} ms`;
-  };
+  }, []);
 
   return (
     <div>

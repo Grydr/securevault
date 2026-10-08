@@ -5,7 +5,7 @@ import BenchmarkModal from './BenchmarkModal';
 
 export default function FilesTab() {
   const [files, setFiles] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [categoryFilter, setCategoryFilter] = useState('');
   const [showUpload, setShowUpload] = useState(false);
   const [uploadCategory, setUploadCategory] = useState('id_card');
@@ -15,21 +15,36 @@ export default function FilesTab() {
   const [selectedFileForBench, setSelectedFileForBench] = useState(null);
   const [downloadNotice, setDownloadNotice] = useState(null);
 
-  const loadFiles = useCallback(async () => {
+  const loadFiles = useCallback(() => {
     setLoading(true);
-    try {
-      const data = await api.getFiles(categoryFilter);
-      setFiles(data);
-    } catch (err) {
-      setError(err.message || 'Failed to load files');
-    } finally {
-      setLoading(false);
-    }
+    api.getFiles(categoryFilter)
+      .then((data) => {
+        setFiles(data);
+      })
+      .catch((err) => {
+        setError(err.message || 'Failed to load files');
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, [categoryFilter]);
 
   useEffect(() => {
-    loadFiles();
-  }, [loadFiles]);
+    let ignore = false;
+    api.getFiles(categoryFilter)
+      .then((data) => {
+        if (!ignore) setFiles(data);
+      })
+      .catch((err) => {
+        if (!ignore) setError(err.message || 'Failed to load files');
+      })
+      .finally(() => {
+        if (!ignore) setLoading(false);
+      });
+    return () => {
+      ignore = true;
+    };
+  }, [categoryFilter]);
 
   const handleUpload = async (e) => {
     e.preventDefault();

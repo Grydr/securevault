@@ -13,16 +13,17 @@ type User struct {
 
 // GDPRPersonalDataPayload represents the sensitive personal information protected by GDPR & UU PDP.
 type GDPRPersonalDataPayload struct {
-	FullName    string `json:"full_name"`     // UU PDP: Data Pribadi Umum (Nama Lengkap)
-	NIK         string `json:"nik"`           // UU PDP: NIK / National Identity Card Number
-	DateOfBirth string `json:"date_of_birth"` // UU PDP: Tanggal Lahir
-	Email       string `json:"email"`         // UU PDP: Kontak Pribadi
-	PhoneNumber string `json:"phone_number"`  // UU PDP: Nomor Telepon
-	Address     string `json:"address"`       // UU PDP: Alamat Tempat Tinggal
-	// UU PDP Data Pribadi Spesifik (Specific / Sensitive Personal Data):
-	HealthData    string `json:"health_data"`    // UU PDP: Data & Informasi Kesehatan (Golongan darah, riwayat medis)
-	FinancialData string `json:"financial_data"` // UU PDP: Data Keuangan Pribadi (Nomor Rekening / NPWP)
-	BiometricNote string `json:"biometric_note"` // UU PDP: Data Biometrik
+	// UU PDP Pasal 4 ayat (3) Data Pribadi Umum (General Personal Data):
+	FullName    string `json:"full_name"`     // UU PDP Pasal 4(3)(a): Nama Lengkap
+	NIK         string `json:"nik"`           // UU PDP Pasal 4(3)(f): NIK / Data Pribadi kombinasi pengidentifikasi
+	DateOfBirth string `json:"date_of_birth"` // UU PDP Pasal 4(3)(f): Tanggal Lahir
+	Email       string `json:"email"`         // UU PDP Pasal 4(3)(f): Kontak Pribadi
+	PhoneNumber string `json:"phone_number"`  // UU PDP Pasal 4(3)(f): Nomor Telepon
+	Address     string `json:"address"`       // UU PDP Pasal 4(3)(f): Alamat Tempat Tinggal
+	// UU PDP Pasal 4 ayat (2) Data Pribadi Spesifik (Specific / Sensitive Personal Data):
+	HealthData    string `json:"health_data"`    // UU PDP Pasal 4(2)(a): Data & Informasi Kesehatan (Golongan darah, riwayat medis)
+	FinancialData string `json:"financial_data"` // UU PDP Pasal 4(2)(f): Data Keuangan Pribadi (Nomor Rekening / NPWP)
+	BiometricNote string `json:"biometric_note"` // UU PDP Pasal 4(2)(b): Data Biometrik
 }
 
 // PersonalDataRecord stores encrypted private data in the database with benchmarks across AES, RC4, and DES.
