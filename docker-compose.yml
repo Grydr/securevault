@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: encryption_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrespassword
+      POSTGRES_DB: encryption_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d encryption_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./encryption-web-backend
+      dockerfile: Dockerfile
+    container_name: encryption_backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      PORT: 8080
+      DB_TYPE: postgres
+      DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/encryption_db?sslmode=disable
+      JWT_SECRET: super-secure-cryptavault-jwt-secret-2026-assignment-1
+      UPLOADS_DIR: /app/uploads
+    ports:
+      - "8080:8080"
+    volumes:
+      - uploads_data:/app/uploads
+
+  frontend:
+    build:
+      context: ./encryption-web-frontend
+      dockerfile: Dockerfile
+    container_name: encryption_frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "3000:80"
+      - "5173:80"
+
+volumes:
+  pgdata:
+  uploads_data:
