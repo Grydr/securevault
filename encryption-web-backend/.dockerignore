@@ -1,0 +1,7 @@
+.git
+.vscode
+.idea
+*.log
+bin
+uploads
+data

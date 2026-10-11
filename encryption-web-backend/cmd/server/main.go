@@ -53,10 +53,7 @@ func main() {
 	r := chi.NewRouter()
 
 	// Middlewares
-	r.Use(middleware.RequestID)
-	r.Use(middleware.RealIP)
-	r.Use(middleware.Logger)
-	r.Use(middleware.Recoverer)
+	r.
 
 	// CORS configuration for frontend
 	r.Use(cors.Handler(cors.Options{

@@ -28,19 +28,24 @@ All stored records (GDPR & UU PDP personal data) and uploaded multimedia files (
 
 ---
 
-## 🚀 Quick Start with Docker
-
-Ensure Docker or Podman is installed, then run from the project root:
+### Option A: Live-Reload Development (Hot Module Replacement)
+Use this during active UI and backend development. Any file you edit on your computer reloads instantly in your browser:
 
 ```bash
-docker compose up --build
+podman compose -f docker-compose.dev.yml up -d
+# or: docker compose -f docker-compose.dev.yml up -d
 ```
-*(Or with Podman: `podman-compose up --build`)*
 
-This starts:
+### Option B: Production Container Build
+```bash
+podman compose up -d --build
+# or: docker compose up -d --build
+```
+
+This serves:
 * **PostgreSQL Database** on `localhost:5432`
 * **Golang Backend Server** on `localhost:8080`
-* **React Frontend SPA (Nginx)** on `localhost:3000` (and `localhost:5173`)
+* **React Frontend** on `localhost:3000` (and `localhost:5173`)
 
 Open your browser at **[http://localhost:3000](http://localhost:3000)**.
 
