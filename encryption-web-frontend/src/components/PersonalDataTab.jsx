@@ -145,10 +145,10 @@ export default function PersonalDataTab() {
         <div>
           <h2 style={{ fontSize: '1.15rem', fontWeight: 600, color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '0.45rem', letterSpacing: '-0.01em' }}>
             <Shield color="var(--primary)" size={18} />
-            <span>GDPR & UU PDP Protected Data Vault</span>
+            <span>Borrower Personal & Financial Data Vault (UU PDP & GDPR)</span>
           </h2>
           <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.15rem' }}>
-            Every entry is simultaneously encrypted with AES-256-CBC, RC4-128, and DES-CBC using unique initialization vectors.
+            Loan applicant sensitive profile encrypted under simultaneous AES-256-CBC, RC4-128, and DES-CBC with strict data privacy compliance.
           </p>
         </div>
         <button
@@ -156,7 +156,7 @@ export default function PersonalDataTab() {
           onClick={() => setShowAddForm(!showAddForm)}
         >
           {showAddForm ? <X size={14} /> : <Plus size={14} />}
-          <span>{showAddForm ? 'Cancel' : 'New Encrypted Record'}</span>
+          <span>{showAddForm ? 'Cancel' : 'New Borrower Profile'}</span>
         </button>
       </div>
 
@@ -176,15 +176,15 @@ export default function PersonalDataTab() {
       {showAddForm && (
         <div className="card" style={{ marginBottom: '1.75rem' }}>
           <div className="card-header">
-            <h3 className="card-title">New Private Data Record (EU GDPR & UU PDP No. 27/2022)</h3>
+            <h3 className="card-title">New Borrower Loan Application Record (UU PDP No. 27/2022 & EU GDPR)</h3>
           </div>
           <form onSubmit={handleCreate}>
             <div className="form-group">
-              <label className="form-label">Record Label / Alias</label>
+              <label className="form-label">Applicant Profile Label / Application ID</label>
               <input
                 type="text"
                 className="form-input"
-                placeholder="e.g. Primary Identity, Banking Profile"
+                placeholder="e.g. Primary Borrower Profile - Loan App #2026-X8"
                 value={label}
                 onChange={(e) => setLabel(e.target.value)}
                 required
@@ -275,20 +275,20 @@ export default function PersonalDataTab() {
 
               <div className="grid-2">
                 <div className="form-group">
-                  <label className="form-label">Health Data (UU PDP Article 4)</label>
+                  <label className="form-label">Health & Credit Insurance Data (UU PDP Art. 4)</label>
                   <textarea
                     className="form-textarea"
-                    placeholder="e.g. Blood Type O+, Penicillin Allergy, Medical History"
+                    placeholder="e.g. Credit Life Insurance: Blood Type O+, No history of cardiovascular illness, Non-smoker"
                     value={healthData}
                     onChange={(e) => setHealthData(e.target.value)}
                   />
                 </div>
 
                 <div className="form-group">
-                  <label className="form-label">Financial Data (UU PDP Article 4)</label>
+                  <label className="form-label">Bank Accounts & Income Data (UU PDP Art. 4)</label>
                   <textarea
                     className="form-textarea"
-                    placeholder="e.g. Bank BCA: 0123456789, NPWP: 98.765.432.1-012.000"
+                    placeholder="e.g. Bank Mandiri: 123-00-9876543-2, Monthly Revenue: IDR 35.000.000, NPWP: 01.234.567.8-012.000"
                     value={financialData}
                     onChange={(e) => setFinancialData(e.target.value)}
                   />
@@ -296,11 +296,11 @@ export default function PersonalDataTab() {
               </div>
 
               <div className="form-group" style={{ marginBottom: 0 }}>
-                <label className="form-label">Biometric Notes / Identifiers</label>
+                <label className="form-label">e-KYC Biometric Verification Hash (UU PDP Art. 4)</label>
                 <input
                   type="text"
                   className="form-input"
-                  placeholder="e.g. Terminal registration token, biometric hash"
+                  placeholder="e.g. e-KYC Facial Recognition Vector Hash: sha256_bio_98f12a..., Match Confidence: 99.4%"
                   value={biometricNote}
                   onChange={(e) => setBiometricNote(e.target.value)}
                 />

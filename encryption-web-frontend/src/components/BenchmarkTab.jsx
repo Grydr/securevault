@@ -59,7 +59,7 @@ export default function BenchmarkTab() {
           <span>Cipher Empirical Benchmark & Comparative Matrix</span>
         </h2>
         <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.15rem' }}>
-          Empirical multi-download evaluation of AES-256-CBC, RC4-128, and DES-CBC across repeated decryption iterations.
+          Empirical multi-download evaluation of AES-256-CBC, RC4-128, and DES-CBC across repeated decryption iterations on e-KYC documents and videos.
         </p>
       </div>
 
@@ -286,7 +286,7 @@ export default function BenchmarkTab() {
         <div style={{ marginTop: '1.25rem', padding: '0.85rem 1rem', backgroundColor: 'var(--bg-well)', borderRadius: '6px', border: '1px solid var(--border-subtle)', display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
           <FileCode size={16} color="var(--text-main)" />
           <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-            Full comparative benchmark findings, mathematical proofs, and legal justifications are documented in <strong style={{ color: 'var(--text-secondary)' }}>ANALYSIS_REPORT.md</strong>.
+            Full comparative benchmark findings, mathematical proofs, and legal justifications are documented in <strong style={{ color: 'var(--text-secondary)' }}>REPORT_2_PAGES.md</strong> and <strong style={{ color: 'var(--text-secondary)' }}>ANALYSIS_REPORT.md</strong>.
           </span>
         </div>
       </div>

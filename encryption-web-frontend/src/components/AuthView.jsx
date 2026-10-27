@@ -47,11 +47,11 @@ export default function AuthView({ onAuthSuccess }) {
           }}>
             <Shield size={20} strokeWidth={2.5} />
           </div>
-          <h1 className="auth-title">CryptaVault</h1>
+          <h1 className="auth-title">SecureVault</h1>
           <p className="auth-subtitle">
-            Cryptographic storage and analysis workstation.
+            Digital Banking e-KYC & Loan Collateral Security Portal.
             <br />
-            Protected by <strong>AES-256-CBC</strong>, <strong>RC4-128</strong>, and <strong>DES-CBC</strong>.
+            Protected by <strong>AES-256-CBC</strong>, <strong>RC4-128</strong>, and <strong>DES-CBC</strong> (UU PDP & GDPR).
           </p>
 
           <div style={{

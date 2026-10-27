@@ -127,11 +127,11 @@ export default function FilesTab() {
   const getCategoryLabel = (cat) => {
     switch (cat) {
       case 'id_card':
-        return 'ID Card Image';
+        return 'Borrower KTP/ID Card';
       case 'video':
-        return 'Video File';
+        return 'e-KYC Liveness Video';
       default:
-        return 'Document (PDF/DOC/XLS)';
+        return 'Financial Doc (PDF/DOC/XLS)';
     }
   };
 
@@ -141,10 +141,10 @@ export default function FilesTab() {
         <div>
           <h2 style={{ fontSize: '1.15rem', fontWeight: 600, color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '0.45rem', letterSpacing: '-0.01em' }}>
             <Layers color="var(--primary)" size={18} />
-            <span>Encrypted Files & Multimedia Repository</span>
+            <span>e-KYC Identity Documents, Financial Proofs & Video Repository</span>
           </h2>
           <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.15rem' }}>
-            ID cards, office documents, and videos protected under simultaneous AES-256-CBC, RC4-128, and DES-CBC encryption.
+            Borrower KTP images, financial statements (PDF/XLS), and liveness verification videos protected under simultaneous AES-256-CBC, RC4-128, and DES-CBC encryption.
           </p>
         </div>
 
@@ -153,7 +153,7 @@ export default function FilesTab() {
           onClick={() => setShowUpload(!showUpload)}
         >
           {showUpload ? <X size={14} /> : <Upload size={14} />}
-          <span>{showUpload ? 'Cancel' : 'Upload New File'}</span>
+          <span>{showUpload ? 'Cancel' : 'Upload e-KYC Asset'}</span>
         </button>
       </div>
 
@@ -178,7 +178,7 @@ export default function FilesTab() {
       {showUpload && (
         <div className="card" style={{ marginBottom: '1.75rem' }}>
           <div className="card-header">
-            <h3 className="card-title">Upload & Encrypt File (AES-256-CBC, RC4-128, DES-CBC)</h3>
+            <h3 className="card-title">Upload & Encrypt e-KYC File (AES-256-CBC, RC4-128, DES-CBC)</h3>
           </div>
           <form onSubmit={handleUpload}>
             <div className="grid-2">
@@ -189,9 +189,9 @@ export default function FilesTab() {
                   value={uploadCategory}
                   onChange={(e) => setUploadCategory(e.target.value)}
                 >
-                  <option value="id_card">User ID Card Image (KTP / Driver License)</option>
-                  <option value="document">Office Document (PDF / DOC / DOCX / XLS / XLSX)</option>
-                  <option value="video">Multimedia Video File (MP4 / MKV / WebM)</option>
+                  <option value="id_card">Borrower ID Card Image (KTP / Paspor / SIM)</option>
+                  <option value="document">Financial Statement / Salary Slip / Collateral Contract (PDF / DOC / XLS)</option>
+                  <option value="video">e-KYC Liveness Verification & Consent Video (MP4 / MKV / WebM)</option>
                 </select>
               </div>
 
@@ -228,26 +228,26 @@ export default function FilesTab() {
           className={`tab-btn ${categoryFilter === 'id_card' ? 'active' : ''}`}
           onClick={() => setCategoryFilter('id_card')}
         >
-          <Image size={13} /> ID Cards
+          <Image size={13} /> KTP / ID Cards
         </button>
         <button
           className={`tab-btn ${categoryFilter === 'document' ? 'active' : ''}`}
           onClick={() => setCategoryFilter('document')}
         >
-          <FileText size={13} /> Documents
+          <FileText size={13} /> Financial Documents
         </button>
         <button
           className={`tab-btn ${categoryFilter === 'video' ? 'active' : ''}`}
           onClick={() => setCategoryFilter('video')}
         >
-          <Video size={13} /> Videos
+          <Video size={13} /> Liveness Videos
         </button>
       </div>
 
       {/* Files List Table */}
       <div className="card">
         <div className="card-header">
-          <h3 className="card-title">Encrypted Storage Repository ({files.length})</h3>
+          <h3 className="card-title">e-KYC Asset Repository ({files.length})</h3>
         </div>
 
         {loading ? (

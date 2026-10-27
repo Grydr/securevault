@@ -10,7 +10,7 @@ export default function Navbar({ user, onLogout }) {
             <Shield size={16} strokeWidth={2.5} />
           </div>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.65rem' }}>
-            <span>CryptaVault</span>
+            <span>SecureVault</span>
             <span style={{ 
               fontSize: '0.725rem',
               fontWeight: 500,
@@ -18,7 +18,7 @@ export default function Navbar({ user, onLogout }) {
               fontFamily: 'var(--font-mono)',
               letterSpacing: '0.04em'
             }}>
-              LABORATORY EDITION
+              DIGITAL BANKING e-KYC
             </span>
           </div>
         </div>

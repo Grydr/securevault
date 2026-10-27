@@ -57,7 +57,7 @@ export default function App() {
         fontSize: '0.85rem',
         backgroundColor: 'var(--bg-main)'
       }}>
-        Loading CryptaVault Laboratory...
+        Loading SecureVault Banking Portal...
       </div>
     );
   }
@@ -72,14 +72,14 @@ export default function App() {
       <Navbar user={user} onLogout={handleLogout} />
 
       <main className="main-content">
-        {/* Navigation Tabs (Minimalist Scandinavian Segmented Controller) */}
+        {/* Navigation Tabs (Minimalist Segmented Controller) */}
         <div className="tabs-header">
           <button
             className={`tab-btn ${activeTab === 'files' ? 'active' : ''}`}
             onClick={() => setActiveTab('files')}
           >
             <Files size={14} />
-            <span>Encrypted Files (ID Cards, Docs, Videos)</span>
+            <span>e-KYC Documents & Video Vault (KTP, Financial, Video)</span>
           </button>
 
           <button
@@ -87,7 +87,7 @@ export default function App() {
             onClick={() => setActiveTab('personal')}
           >
             <Shield size={14} />
-            <span>GDPR & UU PDP Personal Data</span>
+            <span>Borrower Personal Data (UU PDP & GDPR)</span>
           </button>
 
           <button
@@ -95,7 +95,7 @@ export default function App() {
             onClick={() => setActiveTab('benchmark')}
           >
             <Gauge size={14} />
-            <span>Empirical Benchmarks & Analysis</span>
+            <span>Cryptographic Benchmarks & Audit</span>
           </button>
         </div>
 

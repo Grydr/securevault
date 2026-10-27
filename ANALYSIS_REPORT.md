@@ -1,29 +1,31 @@
-# Cryptographic Evaluation & Empirical Analysis Report
-**Course**: Keamanan Informasi (Information Security) — Assignment 1  
+# Cryptographic Evaluation & Empirical Analysis Report: SecureVault
+**Course**: Keamanan Informasi (Information Security) — Assignment 1 (Group of Four)  
+**Target Scenario**: Digital Banking e-KYC & Loan Collateral Security Vault  
 **Stack**: Golang (Backend), PostgreSQL & SQLite (Storage), React + Vite (Frontend), Docker / Podman  
 **Algorithms Evaluated**: AES-256-CBC, RC4-128, and DES-CBC  
 
 ---
 
-## 1. Executive Summary & Legal Compliance Framework
+## 1. Scenario Formulation & Legal Compliance Framework
 
-This project implements a secure, end-to-end encrypted personal data and multimedia vault capable of storing:
-1. **User Private Data** adhering strictly to GDPR (EU 2016/679) and UU PDP (Undang-Undang Republik Indonesia Nomor 27 Tahun 2022).
-2. **User Identification Card Images** (KTP/ID Cards).
-3. **Office & Technical Documents** (PDF, DOC, DOCX, XLS, XLSX).
-4. **Multimedia Video Files** (MP4, MKV, AVI, WebM).
+### 1.1 Digital Banking e-KYC & Loan Origination Scenario
+In digital retail and SME banking, loan applicants (borrowers) submit personal identities, financial proofs, and liveness verifications over digital channels to secure credit approvals. Credit analysts and underwriting algorithms require rapid, authenticated access to evaluate risk.
 
-Every stored record and uploaded file is simultaneously encrypted with all three designated symmetric algorithms: **AES-256**, **RC4-128**, and **DES-64**. Users access their encrypted vault through credential authentication (username/password), from which cryptographic keys are deterministically derived via PBKDF2.
+Because financial institutions operate in an adversarial threat landscape, storing this documentation in plaintext creates catastrophic risks of **identity theft, synthetic loan fraud, and regulatory non-compliance**. SecureVault provides an end-to-end encrypted storage architecture where all applicant assets are protected simultaneously under **AES-256-CBC**, **RC4-128**, and **DES-CBC**:
+1. **Borrower Personal Data**: Structured records containing General and Sensitive personal data.
+2. **Identification Documents**: Scanned Borrower ID cards (KTP / Passports) for identity validation.
+3. **Office & Collateral Documents**: Salary slips, bank statements, tax filings, and collateral deeds (PDF, DOCX, XLSX).
+4. **e-KYC Liveness Verification Videos**: 10–30 second selfie consent videos (MP4, MKV, AVI, WebM) to verify liveness and defeat deepfakes.
 
-### 1.1 Legal Framework: GDPR & UU PDP Data Classification
+### 1.2 Legal Framework: GDPR & UU PDP Data Classification
 
-| Classification | Legal Basis | Implementation in Vault |
+| Classification | Legal Basis | Implementation in Digital Banking Vault |
 | :--- | :--- | :--- |
 | **Data Pribadi Umum (General Personal Data)** | UU PDP Art. 4(3), GDPR Art. 4(1) | Full Name, Date of Birth, Email, Phone Number, Residential Address. |
-| **Data Pribadi Spesifik (Sensitive/Specific Data)** | UU PDP Art. 4(2), GDPR Art. 9 | Health Information (blood type, medical history), Personal Financial Data (bank accounts, NPWP/tax ID), Biometric Notes. |
+| **Data Pribadi Spesifik (Sensitive/Specific Data)** | UU PDP Art. 4(2), GDPR Art. 9 | Credit Life Insurance Health Data, Personal Financial Data (bank accounts, monthly income, NPWP), and Biometric Facial Vector Hashes. |
 | **Unique National Identifier** | UU PDP Art. 4(3)(f) | Nomor Induk Kependudukan (NIK / KTP Number). |
 
-Under UU PDP Article 35 and GDPR Article 32, data controllers are legally mandated to implement pseudonymization and encryption to protect personal data from unauthorized disclosure, alteration, or breach. Plaintext storage of these attributes is non-compliant; storing them encrypted under AES-256 satisfies both domestic and international compliance standards.
+Under UU PDP Article 35 and GDPR Article 32, financial data controllers are legally mandated to implement pseudonymization and encryption to protect personal data from unauthorized disclosure, alteration, or breach. Plaintext storage of these attributes is non-compliant; storing them encrypted under AES-256 satisfies both domestic and international compliance standards.
 
 ---
 
