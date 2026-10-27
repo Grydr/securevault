@@ -358,6 +358,10 @@ func (h *Handler) ListPersonalData(w http.ResponseWriter, r *http.Request) {
 		}
 		records = append(records, rec)
 	}
+	if err := rows.Err(); err != nil {
+		respondError(w, http.StatusInternalServerError, "database rows iteration error")
+		return
+	}
 
 	if records == nil {
 		records = []models.PersonalDataRecord{}
@@ -719,6 +723,10 @@ func (h *Handler) ListFiles(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		files = append(files, f)
+	}
+	if err := dbRows.Err(); err != nil {
+		respondError(w, http.StatusInternalServerError, "database rows iteration error")
+		return
 	}
 
 	if files == nil {
